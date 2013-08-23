@@ -1,10 +1,10 @@
-import twitter
+# Needs https://github.com/bear/python-twitter
+# Only works fine for small timelines. Consider Twitter's API rate limiting
 
-execfile('keys.py')
-
-api = twitter.Api(consumer_key, consumer_secret, access_token_key, access_token_secret)
-
-def GetEntireTimeline(screen_name=None, max_id=None):
-    print 'lol no'
-
+def GetEntireUserTimeline(user):
+	stCount = api.GetUser(screen_name=user).statuses_count
+	timeline = api.GetUserTimeline(screen_name=user)
+	while len(timeline) < stCount:
+		 timeline.extend(api.GetUserTimeline(screen_name=user, max_id=timeline[len(timeline)-1].id))
+	return timeline
 
